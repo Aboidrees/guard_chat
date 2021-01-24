@@ -16,6 +16,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   String email;
   String password;
   @override
+  void initState() {
+    super.initState();
+    _auth.authStateChanges().listen((User user) {
+      if (user == null) {
+        print('User is currently signed out!');
+      } else {
+        print('User is signed in!');
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -52,7 +64,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               text: 'Register',
               onPressed: () async {
                 try {
-                  final newUser = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+                  UserCredential newUser = await _auth.createUserWithEmailAndPassword(email: email, password: password);
                   if (newUser != null) {
                     Navigator.pushNamed(context, ChatScreen.id);
                   }
