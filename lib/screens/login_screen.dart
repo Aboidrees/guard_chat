@@ -9,6 +9,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  String email;
+  String password;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,22 +23,36 @@ class _LoginScreenState extends State<LoginScreen> {
           children: <Widget>[
             Hero(
               tag: 'logo',
-              child: Container(height: 200.0, child: Image.asset('images/logo.png')),
+              child: Container(
+                  height: 200.0, child: Image.asset('images/logo.png')),
             ),
             SizedBox(height: 48.0),
             TextField(
+              keyboardType: TextInputType.emailAddress,
+              textAlign: TextAlign.center,
               style: TextStyle(color: Colors.black),
-              onChanged: (value) {},
-              decoration: kTextFieldDecoration.copyWith(hintText: 'Enter your username'),
+              onChanged: (value) {
+                email = value;
+              },
+              decoration: kTextFieldDecoration.copyWith(
+                  hintText: 'Enter your username'),
             ),
             SizedBox(height: 8.0),
             TextField(
+              obscureText: true,
+              textAlign: TextAlign.center,
               style: TextStyle(color: Colors.black),
-              onChanged: (value) {},
-              decoration: kTextFieldDecoration.copyWith(hintText: 'Enter your password'),
+              onChanged: (value) {
+                password = value;
+              },
+              decoration: kTextFieldDecoration.copyWith(
+                  hintText: 'Enter your password'),
             ),
             SizedBox(height: 24.0),
-            RoundedButton(colour: Colors.lightBlueAccent, text: 'Log In', onPressed: () {}),
+            RoundedButton(
+                colour: Colors.lightBlueAccent,
+                text: 'Log In',
+                onPressed: () {}),
           ],
         ),
       ),
