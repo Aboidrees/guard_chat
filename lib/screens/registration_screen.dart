@@ -56,6 +56,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   if (newUser != null) {
                     Navigator.pushNamed(context, ChatScreen.id);
                   }
+                } on FirebaseAuthException catch (e) {
+                  if (e.code == 'weak-password') {
+                    print('The password provided is too weak.');
+                  } else if (e.code == 'email-already-in-use') {
+                    print('The account already exists for that email.');
+                  }
                 } catch (e) {
                   print(e);
                 }
