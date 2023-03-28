@@ -7,7 +7,13 @@ class AppColors {
   static const Color headPrimary = Colors.black54;
 
   static const Color containerPrimary = Colors.blue;
-  static const Color containerSecondary = Colors.white;
+  static Color containerSecondary = Colors.lightBlue.shade50;
+  static const Color containerLight = Colors.white;
 
+  static const Color backgroundAccent = Colors.blue;
   static const Color background = Colors.white;
+
+  static const Color buttonPrimary = Colors.blue;
+  static const Color buttonSecondary = Colors.lightBlueAccent;
+  static const Color buttonLight = Colors.white;
 }

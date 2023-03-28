@@ -26,7 +26,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
     super.initState();
 
     controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
-    animation = ColorTween(begin: AppColors.containerPrimary, end: AppColors.containerSecondary).animate(controller);
+    animation = ColorTween(begin: AppColors.backgroundAccent, end: AppColors.background).animate(controller);
     controller.forward();
     controller.addListener(() => setState(() {}));
   }
