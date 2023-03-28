@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:guard_chat/core/app_colors.dart';
 import 'package:guard_chat/core/app_routes.dart';
 import 'package:guard_chat/screens/chat_screen.dart';
 import 'package:guard_chat/screens/login_screen.dart';
@@ -20,12 +19,12 @@ class FlashChat extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark().copyWith(
-        textTheme: const TextTheme(
-          bodyMedium: TextStyle(color: AppColors.headPrimary),
-          bodyLarge: TextStyle(color: AppColors.headPrimary),
-        ),
-      ),
+      // theme: ThemeData.dark().copyWith(
+      //   textTheme: const TextTheme(
+      //     bodyMedium: TextStyle(color: AppColors.headPrimary),
+      //     bodyLarge: TextStyle(color: AppColors.headPrimary),
+      //   ),
+      // ),
       // theme: ThemeData.light(),
       initialRoute: AppRoutes.welcome,
       routes: {

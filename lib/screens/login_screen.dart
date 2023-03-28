@@ -9,13 +9,31 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
   @override
-  State<LoginScreen> createState() => LoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> {
+  final _auth = FirebaseAuth.instance;
+
   bool showSpinner = false;
-  late String email;
-  late String password;
+  late TextEditingController email;
+  late TextEditingController password;
+
+  @override
+  void initState() {
+    super.initState();
+    redirectIfLoggedIn();
+    email = TextEditingController();
+    password = TextEditingController();
+  }
+
+  redirectIfLoggedIn() {
+    setState(() => showSpinner = true);
+    if (_auth.currentUser != null && context.mounted) {
+      Navigator.pushReplacementNamed(context, AppRoutes.chat);
+    }
+    setState(() => showSpinner = false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,21 +52,18 @@ class LoginScreenState extends State<LoginScreen> {
                 child: SizedBox(height: 200.0, child: Image.asset('images/logo.png')),
               ),
               const SizedBox(height: 48.0),
-              TextField(
+              const SizedBox(height: 48.0),
+              TextFormField(
                 keyboardType: TextInputType.emailAddress,
                 textAlign: TextAlign.center,
-                onChanged: (value) {
-                  email = value;
-                },
+                controller: email,
                 decoration: kTextFieldDecoration.copyWith(hintText: 'Enter your username'),
               ),
               const SizedBox(height: 8.0),
-              TextField(
+              TextFormField(
                 obscureText: true,
                 textAlign: TextAlign.center,
-                onChanged: (value) {
-                  password = value;
-                },
+                controller: password,
                 decoration: kTextFieldDecoration.copyWith(hintText: 'Enter your password'),
               ),
               const SizedBox(height: 24.0),
@@ -59,15 +74,29 @@ class LoginScreenState extends State<LoginScreen> {
                   setState(() => showSpinner = true);
 
                   try {
-                    Navigator.pushNamed(context, AppRoutes.chat);
-                    setState(() => showSpinner = false);
+                    final userCredential = await _auth.signInWithEmailAndPassword(email: email.text.trim(), password: password.text.trim());
+                    if (userCredential.user != null && context.mounted) {
+                      Navigator.pushNamed(context, AppRoutes.chat);
+                    }
                   } on FirebaseAuthException catch (e) {
                     if (e.code == 'user-not-found') {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('No user found for that email.')),
+                      );
                       debugPrint('No user found for that email.');
                     } else if (e.code == 'wrong-password') {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Wrong password provided for that user.')),
+                      );
                       debugPrint('Wrong password provided for that user.');
                     }
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(e.toString())),
+                    );
+                    debugPrint(e.toString());
                   }
+                  setState(() => showSpinner = false);
                 },
               ),
             ],

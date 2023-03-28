@@ -13,13 +13,18 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  final _auth = FirebaseAuth.instance;
+
   bool showSpinner = false;
-  late String email;
-  late String password;
+
+  late TextEditingController email;
+  late TextEditingController password;
 
   @override
   void initState() {
     super.initState();
+    email = TextEditingController();
+    password = TextEditingController();
   }
 
   @override
@@ -34,23 +39,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Hero(tag: 'logo', child: SizedBox(height: 200.0, child: Image.asset('images/logo.png'))),
+              Hero(
+                tag: 'logo',
+                child: SizedBox(height: 200.0, child: Image.asset('images/logo.png')),
+              ),
               const SizedBox(height: 48.0),
-              TextField(
+              TextFormField(
                 keyboardType: TextInputType.emailAddress,
                 textAlign: TextAlign.center,
-                onChanged: (value) {
-                  email = value;
-                },
+                controller: email,
                 decoration: kTextFieldDecoration.copyWith(hintText: 'Enter your username'),
               ),
               const SizedBox(height: 8.0),
-              TextField(
+              TextFormField(
                 obscureText: true,
                 textAlign: TextAlign.center,
-                onChanged: (value) {
-                  password = value;
-                },
+                controller: password,
                 decoration: kTextFieldDecoration.copyWith(hintText: 'Enter your password'),
               ),
               const SizedBox(height: 24.0),
@@ -60,18 +64,30 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 onPressed: () async {
                   setState(() => showSpinner = true);
                   try {
-                    Navigator.pushNamed(context, AppRoutes.chat);
+                    final newCredential = await _auth.createUserWithEmailAndPassword(email: email.text.trim(), password: password.text.trim());
 
-                    setState(() => showSpinner = false);
+                    if (newCredential.user != null && context.mounted) {
+                      Navigator.pushReplacementNamed(context, AppRoutes.chat);
+                    }
                   } on FirebaseAuthException catch (e) {
                     if (e.code == 'weak-password') {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('The password provided is too weak.')),
+                      );
                       debugPrint('The password provided is too weak.');
                     } else if (e.code == 'email-already-in-use') {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('The account already exists for that email.')),
+                      );
                       debugPrint('The account already exists for that email.');
                     }
                   } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(e.toString())),
+                    );
                     debugPrint(e.toString());
                   }
+                  setState(() => showSpinner = false);
                 },
               ),
             ],
