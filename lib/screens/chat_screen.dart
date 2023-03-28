@@ -4,14 +4,17 @@ import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget {
   static const String id = 'chat_screen';
+
+  const ChatScreen({super.key});
+
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  ChatScreenState createState() => ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class ChatScreenState extends State<ChatScreen> {
   final _auth = FirebaseAuth.instance;
-  User loggedInUser;
-  String messageText;
+  late User loggedInUser;
+  late String messageText;
 
   @override
   void initState() {
@@ -23,7 +26,7 @@ class _ChatScreenState extends State<ChatScreen> {
     final user = _auth.currentUser;
 
     if (user != null) {
-      print(user);
+      debugPrint(user.toString());
       loggedInUser = user;
     }
   }
@@ -35,13 +38,13 @@ class _ChatScreenState extends State<ChatScreen> {
         leading: null,
         actions: <Widget>[
           IconButton(
-              icon: Icon(Icons.close),
+              icon: const Icon(Icons.close),
               onPressed: () {
                 _auth.signOut();
                 Navigator.pop(context);
               }),
         ],
-        title: Text('⚡️Chat'),
+        title: const Text('⚡️Chat'),
         backgroundColor: Colors.lightBlueAccent,
       ),
       body: SafeArea(
@@ -63,14 +66,11 @@ class _ChatScreenState extends State<ChatScreen> {
                       decoration: kMessageTextFieldDecoration,
                     ),
                   ),
-                  FlatButton(
+                  ElevatedButton(
                     onPressed: () {
                       //Implement send functionality.
                     },
-                    child: Text(
-                      'Send',
-                      style: kSendButtonTextStyle,
-                    ),
+                    child: const Text('Send', style: kSendButtonTextStyle),
                   ),
                 ],
               ),

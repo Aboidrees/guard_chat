@@ -3,19 +3,21 @@ import 'package:flash_chat/components/rounded_button.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:flash_chat/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String id = 'registration_screen';
+
+  const RegistrationScreen({super.key});
   @override
-  _RegistrationScreenState createState() => _RegistrationScreenState();
+  State<RegistrationScreen> createState() => _RegistrationScreenState();
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  final _auth = FirebaseAuth.instance;
   bool showSpinner = false;
-  String email;
-  String password;
+  late String email;
+  late String password;
+
   @override
   void initState() {
     super.initState();
@@ -28,13 +30,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Hero(tag: 'logo', child: Container(height: 200.0, child: Image.asset('images/logo.png'))),
-              SizedBox(height: 48.0),
+              Hero(tag: 'logo', child: SizedBox(height: 200.0, child: Image.asset('images/logo.png'))),
+              const SizedBox(height: 48.0),
               TextField(
                 keyboardType: TextInputType.emailAddress,
                 textAlign: TextAlign.center,
@@ -43,7 +45,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 },
                 decoration: kTextFieldDecoration.copyWith(hintText: 'Enter your username'),
               ),
-              SizedBox(height: 8.0),
+              const SizedBox(height: 8.0),
               TextField(
                 obscureText: true,
                 textAlign: TextAlign.center,
@@ -52,30 +54,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 },
                 decoration: kTextFieldDecoration.copyWith(hintText: 'Enter your password'),
               ),
-              SizedBox(height: 24.0),
+              const SizedBox(height: 24.0),
               RoundedButton(
-                colour: Colors.blueAccent,
+                color: Colors.blueAccent,
                 text: 'Register',
                 onPressed: () async {
                   setState(() {
                     showSpinner = true;
                   });
                   try {
-                    UserCredential newUser = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-                    if (newUser != null) {
-                      Navigator.pushNamed(context, ChatScreen.id);
-                    }
+                    Navigator.pushNamed(context, ChatScreen.id);
                     setState(() {
                       showSpinner = false;
                     });
                   } on FirebaseAuthException catch (e) {
                     if (e.code == 'weak-password') {
-                      print('The password provided is too weak.');
+                      debugPrint('The password provided is too weak.');
                     } else if (e.code == 'email-already-in-use') {
-                      print('The account already exists for that email.');
+                      debugPrint('The account already exists for that email.');
                     }
                   } catch (e) {
-                    print(e);
+                    debugPrint(e.toString());
                   }
                 },
               ),
