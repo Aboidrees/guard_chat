@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "158202031849",
-    "project_id": "guard-chat-382001",
-    "storage_bucket": "guard-chat-382001.appspot.com"
+    "project_number": "1006909126881",
+    "project_id": "flash-chat-80b94",
+    "storage_bucket": "flash-chat-80b94.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:158202031849:android:954770b03c72ec1ac60a78",
+        "mobilesdk_app_id": "1:1006909126881:android:3799748b3fd518734b5fa0",
         "android_client_info": {
-          "package_name": "dev.aboidrees.guard_chat"
+          "package_name": "info.aboidrees.flash_chat"
         }
       },
       "oauth_client": [
         {
-          "client_id": "158202031849-ev3eag3h23nri6rhmve024nclfepo5dl.apps.googleusercontent.com",
+          "client_id": "1006909126881-n5fvh7qsl78eg91h8kc6pvq8a1t0qvd4.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBE5Q6N3jTSk0wsDoz2vrFkzV4WUZWnalY"
+          "current_key": "AIzaSyD2inf1Qax4Y1tjKEZ4HqloB6lgzdNL_28"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "158202031849-ev3eag3h23nri6rhmve024nclfepo5dl.apps.googleusercontent.com",
+              "client_id": "1006909126881-n5fvh7qsl78eg91h8kc6pvq8a1t0qvd4.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
