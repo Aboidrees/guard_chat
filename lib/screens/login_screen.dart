@@ -1,13 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flash_chat/components/rounded_button.dart';
-import 'package:flash_chat/constants.dart';
-import 'package:flash_chat/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:guard_chat/constants.dart';
+import 'package:guard_chat/core/app_colors.dart';
+import 'package:guard_chat/core/app_routes.dart';
+import 'package:guard_chat/widgets/rounded_button.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class LoginScreen extends StatefulWidget {
-  static const String id = 'login_screen';
-
   const LoginScreen({super.key});
   @override
   State<LoginScreen> createState() => LoginScreenState();
@@ -21,7 +20,7 @@ class LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
         child: Padding(
@@ -54,13 +53,13 @@ class LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 24.0),
               RoundedButton(
-                color: Colors.lightBlueAccent,
+                color: AppColors.secondary,
                 text: 'Log In',
                 onPressed: () async {
                   setState(() => showSpinner = true);
 
                   try {
-                    Navigator.pushNamed(context, ChatScreen.id);
+                    Navigator.pushNamed(context, AppRoutes.chat);
                     setState(() => showSpinner = false);
                   } on FirebaseAuthException catch (e) {
                     if (e.code == 'user-not-found') {

@@ -1,9 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flash_chat/screens/chat_screen.dart';
-import 'package:flash_chat/screens/login_screen.dart';
-import 'package:flash_chat/screens/registration_screen.dart';
-import 'package:flash_chat/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:guard_chat/core/app_colors.dart';
+import 'package:guard_chat/core/app_routes.dart';
+import 'package:guard_chat/screens/chat_screen.dart';
+import 'package:guard_chat/screens/login_screen.dart';
+import 'package:guard_chat/screens/registration_screen.dart';
+import 'package:guard_chat/screens/welcome_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,19 +19,20 @@ class FlashChat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // theme: ThemeData.dark().copyWith(
-      //   textTheme: TextTheme(
-      //     bodyText2: TextStyle(color: Colors.black54),
-      //     bodyText1: TextStyle(color: Colors.black54),
-      //   ),
-      // ),
-      theme: ThemeData.light(),
-      initialRoute: WelcomeScreen.id,
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.dark().copyWith(
+        textTheme: const TextTheme(
+          bodyMedium: TextStyle(color: AppColors.headPrimary),
+          bodyLarge: TextStyle(color: AppColors.headPrimary),
+        ),
+      ),
+      // theme: ThemeData.light(),
+      initialRoute: AppRoutes.welcome,
       routes: {
-        WelcomeScreen.id: (context) => const WelcomeScreen(),
-        LoginScreen.id: (context) => const LoginScreen(),
-        RegistrationScreen.id: (context) => const RegistrationScreen(),
-        ChatScreen.id: (context) => const ChatScreen(),
+        AppRoutes.chat: (context) => const ChatScreen(),
+        AppRoutes.login: (context) => const LoginScreen(),
+        AppRoutes.welcome: (context) => const WelcomeScreen(),
+        AppRoutes.registration: (context) => const RegistrationScreen(),
       },
     );
   }

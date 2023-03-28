@@ -1,10 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flash_chat/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:guard_chat/constants.dart';
 
 class ChatScreen extends StatefulWidget {
-  static const String id = 'chat_screen';
-
   const ChatScreen({super.key});
 
   @override
@@ -69,6 +68,7 @@ class ChatScreenState extends State<ChatScreen> {
                   ElevatedButton(
                     onPressed: () {
                       //Implement send functionality.
+                      FirebaseFirestore.instance.collection("messages/${loggedInUser.uid}").add({"message": messageText});
                     },
                     child: const Text('Send', style: kSendButtonTextStyle),
                   ),

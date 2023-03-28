@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "info.aboidrees" "\0"
-            VALUE "FileDescription", "flash_chat" "\0"
+            VALUE "CompanyName", "dev.aboidrees" "\0"
+            VALUE "FileDescription", "guard_chat" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "flash_chat" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2023 info.aboidrees. All rights reserved." "\0"
-            VALUE "OriginalFilename", "flash_chat.exe" "\0"
-            VALUE "ProductName", "flash_chat" "\0"
+            VALUE "InternalName", "guard_chat" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2023 dev.aboidrees. All rights reserved." "\0"
+            VALUE "OriginalFilename", "guard_chat.exe" "\0"
+            VALUE "ProductName", "guard_chat" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

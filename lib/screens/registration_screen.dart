@@ -1,13 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flash_chat/components/rounded_button.dart';
-import 'package:flash_chat/constants.dart';
-import 'package:flash_chat/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:guard_chat/constants.dart';
+import 'package:guard_chat/core/app_colors.dart';
+import 'package:guard_chat/core/app_routes.dart';
+import 'package:guard_chat/widgets/rounded_button.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class RegistrationScreen extends StatefulWidget {
-  static const String id = 'registration_screen';
-
   const RegistrationScreen({super.key});
   @override
   State<RegistrationScreen> createState() => _RegistrationScreenState();
@@ -26,7 +25,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
         child: Padding(
@@ -56,17 +55,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               const SizedBox(height: 24.0),
               RoundedButton(
-                color: Colors.blueAccent,
+                color: AppColors.secondary,
                 text: 'Register',
                 onPressed: () async {
-                  setState(() {
-                    showSpinner = true;
-                  });
+                  setState(() => showSpinner = true);
                   try {
-                    Navigator.pushNamed(context, ChatScreen.id);
-                    setState(() {
-                      showSpinner = false;
-                    });
+                    Navigator.pushNamed(context, AppRoutes.chat);
+
+                    setState(() => showSpinner = false);
                   } on FirebaseAuthException catch (e) {
                     if (e.code == 'weak-password') {
                       debugPrint('The password provided is too weak.');

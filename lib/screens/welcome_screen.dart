@@ -1,12 +1,10 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:flash_chat/components/rounded_button.dart';
-import 'package:flash_chat/screens/login_screen.dart';
-import 'package:flash_chat/screens/registration_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:guard_chat/core/app_colors.dart';
+import 'package:guard_chat/core/app_routes.dart';
+import 'package:guard_chat/widgets/rounded_button.dart';
 
 class WelcomeScreen extends StatefulWidget {
-  static const String id = 'welcome_screen';
-
   const WelcomeScreen({super.key});
 
   @override
@@ -28,8 +26,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
 
     super.initState();
 
-    controller = AnimationController(duration: const Duration(seconds: 3), vsync: this);
-    animation = ColorTween(begin: Colors.white, end: Colors.blue).animate(controller);
+    controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
+    animation = ColorTween(begin: AppColors.secondary, end: AppColors.primary).animate(controller);
     controller.forward();
     controller.addListener(() => setState(() {}));
   }
@@ -58,23 +56,23 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                 ),
                 AnimatedTextKit(animatedTexts: [
                   TypewriterAnimatedText(
-                    'Flash Chat',
+                    'Guard Chat',
                     textStyle: const TextStyle(fontSize: 45.0, fontWeight: FontWeight.w900),
-                    speed: const Duration(milliseconds: 2000),
+                    speed: const Duration(milliseconds: 1000),
                   )
                 ])
               ],
             ),
             const SizedBox(height: 48.0),
             RoundedButton(
-              color: Colors.lightBlueAccent,
+              color: AppColors.secondary,
               text: 'Log In',
-              onPressed: () => Navigator.pushNamed(context, LoginScreen.id),
+              onPressed: () => Navigator.pushNamed(context, AppRoutes.chat),
             ),
             RoundedButton(
-              color: Colors.blueAccent,
+              color: AppColors.secondary,
               text: 'Register',
-              onPressed: () => Navigator.pushNamed(context, RegistrationScreen.id),
+              onPressed: () => Navigator.pushNamed(context, AppRoutes.registration),
             ),
           ],
         ),
