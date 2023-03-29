@@ -1,9 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:guard_chat/core/app_routes.dart';
+import 'package:guard_chat/screens/authentication_screen.dart';
 import 'package:guard_chat/screens/chat_screen.dart';
-import 'package:guard_chat/screens/login_screen.dart';
-import 'package:guard_chat/screens/registration_screen.dart';
 import 'package:guard_chat/screens/welcome_screen.dart';
 
 Future<void> main() async {
@@ -25,13 +24,21 @@ class FlashChat extends StatelessWidget {
       //     bodyLarge: TextStyle(color: AppColors.headPrimary),
       //   ),
       // ),
-      // theme: ThemeData.light(),
+      theme: ThemeData(
+        useMaterial3: true,
+        dropdownMenuTheme: DropdownMenuThemeData(
+          inputDecorationTheme: InputDecorationTheme(
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+          ),
+        ),
+      ),
       initialRoute: AppRoutes.welcome,
       routes: {
         AppRoutes.chat: (context) => const ChatScreen(),
-        AppRoutes.login: (context) => const LoginScreen(),
+        AppRoutes.login: (context) => const AuthenticationScreen(),
         AppRoutes.welcome: (context) => const WelcomeScreen(),
-        AppRoutes.registration: (context) => const RegistrationScreen(),
       },
     );
   }
