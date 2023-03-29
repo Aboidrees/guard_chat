@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:guard_chat/constants.dart';
-import 'package:guard_chat/core/app_colors.dart';
-import 'package:guard_chat/core/app_routes.dart';
+import 'package:guard_chat/core/util/app_colors.dart';
+import 'package:guard_chat/core/util/app_routes.dart';
+import 'package:guard_chat/core/util/app_strings.dart';
+import 'package:guard_chat/core/util/assets_manager.dart';
+import 'package:guard_chat/core/util/error_message.dart';
 import 'package:guard_chat/widgets/rounded_button.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
@@ -27,7 +29,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
   redirectIfLoggedIn() {
     setState(() => showSpinner = true);
     if (_auth.currentUser != null && context.mounted) {
-      Navigator.pushReplacementNamed(context, AppRoutes.chat);
+      Navigator.pushReplacementNamed(context, Routes.chat);
     }
     setState(() => showSpinner = false);
   }
@@ -46,8 +48,8 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
             children: <Widget>[
               Flexible(
                 child: Hero(
-                  tag: 'logo',
-                  child: SizedBox(height: 200.0, child: Image.asset('images/logo.png')),
+                  tag: HeroTags.logo,
+                  child: SizedBox(height: 200.0, child: Image.asset(ImgAssets.logo)),
                 ),
               ),
               const SizedBox(height: 48.0),
@@ -86,7 +88,7 @@ class _PhoneNumberFormState extends State<PhoneNumberForm> {
   redirectIfLoggedIn() {
     setState(() => showSpinner = true);
     if (_auth.currentUser != null && context.mounted) {
-      Navigator.pushReplacementNamed(context, AppRoutes.chat);
+      Navigator.pushReplacementNamed(context, Routes.chat);
     }
     setState(() => showSpinner = false);
   }
@@ -104,7 +106,7 @@ class _PhoneNumberFormState extends State<PhoneNumberForm> {
                 keyboardType: TextInputType.number,
                 textAlign: TextAlign.center,
                 controller: countryCode,
-                decoration: kTextFieldDecoration.copyWith(prefixText: "+"),
+                decoration: const InputDecoration(prefixText: "+"),
               ),
             ),
             const SizedBox(width: 8.0),
@@ -113,8 +115,8 @@ class _PhoneNumberFormState extends State<PhoneNumberForm> {
               child: TextFormField(
                 textAlign: TextAlign.center,
                 controller: phoneNumber,
-                decoration: kTextFieldDecoration.copyWith(
-                  hintText: 'Enter phone number',
+                decoration: const InputDecoration(
+                  hintText: AppStrings.phoneFieldHint,
                 ),
               ),
             ),
@@ -123,7 +125,7 @@ class _PhoneNumberFormState extends State<PhoneNumberForm> {
         const SizedBox(height: 24.0),
         RoundedButton(
           color: AppColors.secondary,
-          text: 'Next',
+          text: AppStrings.next,
           onPressed: () async {
             setState(() => showSpinner = true);
 
@@ -136,31 +138,25 @@ class _PhoneNumberFormState extends State<PhoneNumberForm> {
                 verificationFailed: (FirebaseAuthException e) {
                   var message = "";
 
-                  if (e.code == 'invalid-phone-number') {
-                    message = 'The provided phone number is not valid.';
-                  } else {
-                    message = 'Something went wrong, try again later.';
+                  switch (e.code) {
+                    case AppErrorCodes.invalidPhoneNumber:
+                      message = AppErrorMessages.invalidPhoneNumber;
+                      break;
+                    default:
+                      message = AppErrorMessages.unknownError;
                   }
 
-                  debugPrint(message);
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+                  errorMessage(context, msg: message);
                 },
               );
             } on FirebaseAuthException catch (e) {
-              if (e.code == 'user-not-found') {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('No user found for that email.')),
-                );
-                debugPrint('No user found for that email.');
-              } else if (e.code == 'wrong-password') {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Wrong password provided for that user.')),
-                );
-                debugPrint('Wrong password provided for that user.');
+              if (e.code == AppErrorCodes.userNotFound) {
+                errorMessage(context, msg: AppErrorMessages.userNotFound);
+              } else if (e.code == AppErrorCodes.wrongPassword) {
+                errorMessage(context, msg: AppErrorMessages.wrongPassword);
               }
             } catch (e) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
-              debugPrint(e.toString());
+              errorMessage(context, msg: e.toString());
             }
 
             // await _auth.signInWithCredential(PhoneAuthProvider.credential(verificationId: this.verCode, smsCode: smsCode));

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:guard_chat/core/app_routes.dart';
+import 'package:guard_chat/core/util/app_routes.dart';
 import 'package:guard_chat/widgets/message_bubble.dart';
 
 class MessagesStream extends StatefulWidget {
@@ -24,7 +24,7 @@ class _MessagesStreamState extends State<MessagesStream> {
 
   void currentUserListener(User? user) {
     if (user == null) {
-      Navigator.pushNamed(context, AppRoutes.welcome);
+      Navigator.pushNamed(context, Routes.welcome);
     } else {
       loggedInUser = user;
     }

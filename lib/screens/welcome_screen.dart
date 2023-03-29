@@ -1,8 +1,10 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:guard_chat/core/app_colors.dart';
-import 'package:guard_chat/core/app_routes.dart';
+import 'package:guard_chat/core/util/app_colors.dart';
+import 'package:guard_chat/core/util/app_routes.dart';
+import 'package:guard_chat/core/util/app_strings.dart';
+import 'package:guard_chat/core/util/assets_manager.dart';
 import 'package:guard_chat/widgets/rounded_button.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -20,7 +22,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
   @override
   void initState() {
     super.initState();
-    _auth.authStateChanges().listen((User? user) => (user != null) ? Navigator.pushNamed(context, AppRoutes.chat) : null);
+    _auth.authStateChanges().listen((User? user) => (user != null) ? Navigator.pushNamed(context, Routes.chat) : null);
     controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
     animation = ColorTween(begin: AppColors.backgroundAccent, end: AppColors.background).animate(controller);
     controller.forward();
@@ -46,12 +48,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
             Expanded(
               child: Row(
                 children: <Widget>[
-                  Hero(tag: 'logo', child: SizedBox(height: 120.0, child: Image.asset('images/logo.png'))),
+                  Hero(tag: HeroTags.logo, child: SizedBox(height: 120.0, child: Image.asset(ImgAssets.logo))),
                   AnimatedTextKit(
                     repeatForever: true,
                     animatedTexts: [
                       TypewriterAnimatedText(
-                        'Guard Chat',
+                        AppStrings.appName,
                         textStyle: const TextStyle(fontSize: 32.0, fontWeight: FontWeight.w900),
                         speed: const Duration(milliseconds: 200),
                       )
@@ -65,8 +67,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
 
             RoundedButton(
               color: AppColors.secondary,
-              text: 'Get Started',
-              onPressed: () => Navigator.pushNamed(context, AppRoutes.login),
+              text: AppStrings.getStarted,
+              onPressed: () => Navigator.pushNamed(context, Routes.authentication),
             ),
             const SizedBox(height: 30),
           ],

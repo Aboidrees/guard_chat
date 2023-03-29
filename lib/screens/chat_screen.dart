@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:guard_chat/constants.dart';
-import 'package:guard_chat/core/app_routes.dart';
+import 'package:guard_chat/core/util/app_routes.dart';
+import 'package:guard_chat/core/util/app_strings.dart';
+import 'package:guard_chat/core/util/error_message.dart';
 import 'package:guard_chat/widgets/message_stream.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -28,7 +30,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void currentUserListener(User? user) {
     if (user == null) {
-      Navigator.pushNamed(context, AppRoutes.welcome);
+      Navigator.pushNamed(context, Routes.welcome);
     } else {
       loggedInUser = user;
     }
@@ -43,7 +45,7 @@ class _ChatScreenState extends State<ChatScreen> {
         }).then((value) => message.clear());
       }
     } catch (e) {
-      debugPrint("Field to send");
+      errorMessage(context, msg: AppErrorMessages.failedToSend);
     }
   }
 
@@ -56,7 +58,7 @@ class _ChatScreenState extends State<ChatScreen> {
           backgroundColor: Colors.lightBlueAccent,
           automaticallyImplyLeading: false,
           leadingWidth: 0.0,
-          title: const Text('⚡️Chat'),
+          title: Text(loggedInUser.displayName ?? loggedInUser.phoneNumber ?? loggedInUser.email ?? ""),
           centerTitle: true,
           actions: [IconButton(icon: const Icon(Icons.logout), onPressed: _auth.signOut)],
         ),
@@ -74,7 +76,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     Expanded(child: TextFormField(controller: message, decoration: kMessageTextFieldDecoration)),
                     TextButton(
                       onPressed: sendMessage,
-                      child: const Text('Send', style: kSendButtonTextStyle),
+                      child: const Text(AppStrings.send, style: kSendButtonTextStyle),
                     ),
                   ],
                 ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guard_chat/core/app_colors.dart';
+import 'package:guard_chat/core/util/app_colors.dart';
 
 class MessageBubble extends StatelessWidget {
   const MessageBubble({super.key, required this.isMe, required this.text});
