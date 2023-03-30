@@ -9,6 +9,12 @@ ThemeData appTheme() {
     brightness: Brightness.light,
     fontFamily: GoogleFonts.tajawal().fontFamily,
     scaffoldBackgroundColor: Colors.white,
+    appBarTheme: const AppBarTheme(
+      elevation: 0,
+      centerTitle: true,
+      backgroundColor: Colors.lightBlueAccent,
+      titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
+    ),
     textTheme: const TextTheme(
       labelLarge: TextStyle(
         fontSize: 16,
@@ -18,7 +24,7 @@ ThemeData appTheme() {
     ),
     inputDecorationTheme: const InputDecorationTheme(
       hintStyle: TextStyle(fontSize: 14.0),
-      contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+      contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(32.0)),
       ),

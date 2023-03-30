@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:guard_chat/core/util/app_routes.dart';
-import 'package:guard_chat/widgets/message_bubble.dart';
+import 'package:guard_chat/config/routes/app_routes.dart';
+import 'package:guard_chat/features/chat/presentation/widgets/message_bubble.dart';
 
 class MessagesStream extends StatefulWidget {
   const MessagesStream({super.key});
@@ -47,7 +47,7 @@ class _MessagesStreamState extends State<MessagesStream> {
             itemBuilder: (context, index) {
               final text = messages?[index].data()['text'];
               final sender = messages?[index].data()['sender'];
-              final isMe = (sender == _auth.currentUser?.email);
+              final isMe = (sender == _auth.currentUser?.phoneNumber);
 
               return MessageBubble(text: text, isMe: isMe);
             },

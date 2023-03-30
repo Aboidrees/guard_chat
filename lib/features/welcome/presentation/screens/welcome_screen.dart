@@ -1,8 +1,8 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:guard_chat/config/routes/app_routes.dart';
 import 'package:guard_chat/core/util/app_colors.dart';
-import 'package:guard_chat/core/util/app_routes.dart';
 import 'package:guard_chat/core/util/app_strings.dart';
 import 'package:guard_chat/core/util/assets_manager.dart';
 import 'package:guard_chat/widgets/rounded_button.dart';

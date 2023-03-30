@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:guard_chat/config/constants.dart';
+import 'package:guard_chat/config/routes/app_routes.dart';
 import 'package:guard_chat/core/util/app_colors.dart';
-import 'package:guard_chat/core/util/app_routes.dart';
 import 'package:guard_chat/core/util/app_strings.dart';
 import 'package:guard_chat/core/util/assets_manager.dart';
 import 'package:guard_chat/core/util/error_message.dart';
@@ -76,11 +79,13 @@ class _PhoneNumberFormState extends State<PhoneNumberForm> {
   late TextEditingController countryCode;
   late TextEditingController phoneNumber;
   late String verCode;
+  late FocusNode myFocusNode;
 
   @override
   void initState() {
     super.initState();
     redirectIfLoggedIn();
+    myFocusNode = FocusNode();
     countryCode = TextEditingController();
     phoneNumber = TextEditingController();
   }
@@ -107,17 +112,18 @@ class _PhoneNumberFormState extends State<PhoneNumberForm> {
                 textAlign: TextAlign.center,
                 controller: countryCode,
                 decoration: const InputDecoration(prefixText: "+"),
+                onChanged: (value) => (value.toString().length >= 3) ? myFocusNode.requestFocus() : null,
               ),
             ),
             const SizedBox(width: 8.0),
             Flexible(
               flex: 7,
               child: TextFormField(
+                focusNode: myFocusNode,
+                keyboardType: TextInputType.number,
                 textAlign: TextAlign.center,
                 controller: phoneNumber,
-                decoration: const InputDecoration(
-                  hintText: AppStrings.phoneFieldHint,
-                ),
+                decoration: const InputDecoration(hintText: AppStrings.phoneFieldHint),
               ),
             ),
           ],
@@ -128,43 +134,59 @@ class _PhoneNumberFormState extends State<PhoneNumberForm> {
           text: AppStrings.next,
           onPressed: () async {
             setState(() => showSpinner = true);
-
-            try {
-              await _auth.verifyPhoneNumber(
-                phoneNumber: "+${countryCode.text.trim()}${phoneNumber.text.trim()}",
-                verificationCompleted: _auth.signInWithCredential,
-                codeSent: (String verificationId, int? resendToken) => setState(() => verCode = verificationId),
-                codeAutoRetrievalTimeout: (String verificationId) => setState(() => verCode = verificationId),
-                verificationFailed: (FirebaseAuthException e) {
-                  var message = "";
-
-                  switch (e.code) {
-                    case AppErrorCodes.invalidPhoneNumber:
-                      message = AppErrorMessages.invalidPhoneNumber;
-                      break;
-                    default:
-                      message = AppErrorMessages.unknownError;
-                  }
-
-                  errorMessage(context, msg: message);
-                },
-              );
-            } on FirebaseAuthException catch (e) {
-              if (e.code == AppErrorCodes.userNotFound) {
-                errorMessage(context, msg: AppErrorMessages.userNotFound);
-              } else if (e.code == AppErrorCodes.wrongPassword) {
-                errorMessage(context, msg: AppErrorMessages.wrongPassword);
-              }
-            } catch (e) {
-              errorMessage(context, msg: e.toString());
-            }
-
-            // await _auth.signInWithCredential(PhoneAuthProvider.credential(verificationId: this.verCode, smsCode: smsCode));
-
+            phoneAuthentication("+${countryCode.text.trim()}${phoneNumber.text.trim()}");
             setState(() => showSpinner = false);
           },
         ),
       ],
     );
+  }
+
+  Future<void> phoneAuthentication(String phoneNumber) async {
+    try {
+      await _auth.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        verificationCompleted: _auth.signInWithCredential,
+        codeSent: (String verificationId, int? resendToken) => setState(() => verCode = verificationId),
+        codeAutoRetrievalTimeout: (String verificationId) => setState(() => verCode = verificationId),
+        verificationFailed: (FirebaseAuthException e) {
+          var message = "";
+
+          switch (e.code) {
+            case AppErrorCodes.invalidPhoneNumber:
+              message = AppErrorMessages.invalidPhoneNumber;
+              break;
+            default:
+              message = AppErrorMessages.unknownError;
+          }
+          errorMessage(context, msg: message);
+        },
+      );
+      if (context.mounted) {
+        Constants.showOTPDialog(
+          context,
+          verifyOTP: (verificationCode) async {
+            if (await verifyOTP(verificationCode)) {
+              if (context.mounted) Navigator.pushNamed(context, Routes.chat);
+            }
+          },
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == AppErrorCodes.userNotFound) {
+        errorMessage(context, msg: AppErrorMessages.userNotFound);
+      } else if (e.code == AppErrorCodes.wrongPassword) {
+        errorMessage(context, msg: AppErrorMessages.wrongPassword);
+      }
+    } catch (e) {
+      errorMessage(context, msg: e.toString());
+    }
+  }
+
+  Future<bool> verifyOTP(String otp) async {
+    final provider = PhoneAuthProvider.credential(verificationId: verCode, smsCode: otp);
+    final credentials = await _auth.signInWithCredential(provider);
+    log(credentials.user.toString());
+    return credentials.user != null;
   }
 }

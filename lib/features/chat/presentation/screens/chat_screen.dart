@@ -1,11 +1,13 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:guard_chat/constants.dart';
-import 'package:guard_chat/core/util/app_routes.dart';
+import 'package:guard_chat/config/constants.dart';
+import 'package:guard_chat/config/routes/app_routes.dart';
 import 'package:guard_chat/core/util/app_strings.dart';
 import 'package:guard_chat/core/util/error_message.dart';
-import 'package:guard_chat/widgets/message_stream.dart';
+import 'package:guard_chat/features/chat/presentation/widgets/message_stream.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -15,7 +17,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  late User loggedInUser;
+  User? loggedInUser;
   late TextEditingController message;
 
   final _messages = FirebaseFirestore.instance.collection("messages");
@@ -23,12 +25,13 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
-    super.initState();
     _auth.authStateChanges().listen(currentUserListener);
     message = TextEditingController();
+    super.initState();
   }
 
   void currentUserListener(User? user) {
+    log(user.toString());
     if (user == null) {
       Navigator.pushNamed(context, Routes.welcome);
     } else {
@@ -41,7 +44,7 @@ class _ChatScreenState extends State<ChatScreen> {
       if (message.text.trim().isNotEmpty) {
         _messages.add({
           'text': message.text.trim(),
-          'sender': loggedInUser.email,
+          'sender': loggedInUser?.phoneNumber,
         }).then((value) => message.clear());
       }
     } catch (e) {
@@ -55,10 +58,9 @@ class _ChatScreenState extends State<ChatScreen> {
       onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.lightBlueAccent,
           automaticallyImplyLeading: false,
           leadingWidth: 0.0,
-          title: Text(loggedInUser.displayName ?? loggedInUser.phoneNumber ?? loggedInUser.email ?? ""),
+          title: Text(loggedInUser?.displayName ?? loggedInUser?.phoneNumber ?? ""),
           centerTitle: true,
           actions: [IconButton(icon: const Icon(Icons.logout), onPressed: _auth.signOut)],
         ),
@@ -75,7 +77,12 @@ class _ChatScreenState extends State<ChatScreen> {
                   children: <Widget>[
                     Expanded(child: TextFormField(controller: message, decoration: kMessageTextFieldDecoration)),
                     TextButton(
-                      onPressed: sendMessage,
+                      onPressed: () => Constants.showOTPDialog(
+                        context,
+                        verifyOTP: (verificationCode) {
+                          log(verificationCode);
+                        },
+                      ),
                       child: const Text(AppStrings.send, style: kSendButtonTextStyle),
                     ),
                   ],

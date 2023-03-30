@@ -1,9 +1,10 @@
-part of 'authentication_bloc.dart';
+part of 'authentication_cubit.dart';
 
 abstract class AuthenticationState extends Equatable {
-  const AuthenticationState();  
+  const AuthenticationState();
 
   @override
   List<Object> get props => [];
 }
+
 class AuthenticationInitial extends AuthenticationState {}

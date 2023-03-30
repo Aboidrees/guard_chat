@@ -1,9 +1,10 @@
-part of 'chat_bloc.dart';
+part of 'chat_cubit.dart';
 
 abstract class ChatState extends Equatable {
-  const ChatState();  
+  const ChatState();
 
   @override
   List<Object> get props => [];
 }
+
 class ChatInitial extends ChatState {}
