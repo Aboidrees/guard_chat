@@ -17,6 +17,7 @@ class AppErrorCodes {
   static const String invalidPhoneNumber = 'invalid-phone-number';
   static const String userNotFound = 'user-not-found';
   static const String wrongPassword = 'wrong-password';
+  static const String tooManyRequests = 'wrong-password';
 }
 
 class AppErrorMessages {
@@ -27,4 +28,5 @@ class AppErrorMessages {
   static const String invalidPhoneNumber = 'The provided phone number is not valid.';
   static const String userNotFound = 'No user found.';
   static const String wrongPassword = 'Wrong password provided for that user.';
+  static const String tooManyRequests = 'Wrong password provided for that user.';
 }

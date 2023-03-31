@@ -32,15 +32,20 @@ class Constants {
       context: context,
       builder: (context) {
         return CupertinoAlertDialog(
-          title: const Text("", style: TextStyle(color: Colors.black, fontSize: 16)),
+          title: const Text("OTP", style: TextStyle(color: Colors.black, fontSize: 16)),
           content: Material(
+            color: Colors.red,
+            type: MaterialType.transparency,
+            textStyle: const TextStyle(color: Colors.red),
             child: OtpTextField(
               numberOfFields: 6,
-              borderColor: AppColors.primary.withOpacity(0.5),
-              enabledBorderColor: AppColors.primary,
-              fillColor: Colors.red,
+              fieldWidth: 30,
+              enabledBorderColor: AppColors.secondary.withOpacity(0.3),
+              focusedBorderColor: AppColors.secondary,
+              fillColor: Colors.transparent,
               filled: true,
-              showFieldAsBox: true,
+              textStyle: const TextStyle(color: Colors.red),
+              showFieldAsBox: false,
               onCodeChanged: (String code) {},
               onSubmit: verifyOTP,
             ),
@@ -61,19 +66,15 @@ class Constants {
 }
 
 const kSendButtonTextStyle = TextStyle(
-  color: Colors.lightBlueAccent,
+  color: AppColors.primary,
   fontWeight: FontWeight.bold,
   fontSize: 18.0,
 );
 
-const kMessageTextFieldDecoration = InputDecoration(
-  contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+var kMessageTextFieldDecoration = const InputDecoration(
   hintText: 'Type your message here...',
-  border: InputBorder.none,
 );
 
 const kMessageContainerDecoration = BoxDecoration(
-  border: Border(
-    top: BorderSide(color: Colors.lightBlueAccent, width: 2.0),
-  ),
+  border: Border(top: BorderSide(color: AppColors.primary, width: 0.3)),
 );

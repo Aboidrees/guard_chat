@@ -40,7 +40,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.backgroundPrimary,
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
         child: Padding(
@@ -79,14 +79,16 @@ class _PhoneNumberFormState extends State<PhoneNumberForm> {
   late TextEditingController countryCode;
   late TextEditingController phoneNumber;
   late String verCode;
-  late FocusNode myFocusNode;
+  late FocusNode countryCodeFocus;
+  late FocusNode phoneNumberFocus;
 
   @override
   void initState() {
     super.initState();
     redirectIfLoggedIn();
-    myFocusNode = FocusNode();
-    countryCode = TextEditingController();
+    countryCodeFocus = FocusNode();
+    phoneNumberFocus = FocusNode();
+    countryCode = TextEditingController(text: "+");
     phoneNumber = TextEditingController();
   }
 
@@ -108,22 +110,23 @@ class _PhoneNumberFormState extends State<PhoneNumberForm> {
             Flexible(
               flex: 3,
               child: TextFormField(
+                focusNode: countryCodeFocus,
                 keyboardType: TextInputType.number,
                 textAlign: TextAlign.center,
                 controller: countryCode,
-                decoration: const InputDecoration(prefixText: "+"),
-                onChanged: (value) => (value.toString().length >= 3) ? myFocusNode.requestFocus() : null,
+                onChanged: (value) => (value.toString().length >= 4) ? phoneNumberFocus.requestFocus() : null,
               ),
             ),
             const SizedBox(width: 8.0),
             Flexible(
               flex: 7,
               child: TextFormField(
-                focusNode: myFocusNode,
+                focusNode: phoneNumberFocus,
                 keyboardType: TextInputType.number,
                 textAlign: TextAlign.center,
                 controller: phoneNumber,
                 decoration: const InputDecoration(hintText: AppStrings.phoneFieldHint),
+                onChanged: (value) => (value.toString().isEmpty) ? countryCodeFocus.requestFocus() : null,
               ),
             ),
           ],
@@ -151,11 +154,15 @@ class _PhoneNumberFormState extends State<PhoneNumberForm> {
         codeAutoRetrievalTimeout: (String verificationId) => setState(() => verCode = verificationId),
         verificationFailed: (FirebaseAuthException e) {
           var message = "";
-
+          log(e.message.toString());
           switch (e.code) {
             case AppErrorCodes.invalidPhoneNumber:
               message = AppErrorMessages.invalidPhoneNumber;
               break;
+            case AppErrorCodes.tooManyRequests:
+              message = AppErrorMessages.tooManyRequests;
+              break;
+
             default:
               message = AppErrorMessages.unknownError;
           }
@@ -179,6 +186,7 @@ class _PhoneNumberFormState extends State<PhoneNumberForm> {
         errorMessage(context, msg: AppErrorMessages.wrongPassword);
       }
     } catch (e) {
+      log(e.toString());
       errorMessage(context, msg: e.toString());
     }
   }

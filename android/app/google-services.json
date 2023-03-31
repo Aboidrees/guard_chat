@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "158202031849-h3gmntvcpng7q6fr1cvjjqkd311q6gsb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dev.aboidrees.guard_chat",
+            "certificate_hash": "8a296c17b6c2a74765403e4efad23bbfe957e0f7"
+          }
+        },
+        {
           "client_id": "158202031849-ev3eag3h23nri6rhmve024nclfepo5dl.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "158202031849-ev3eag3h23nri6rhmve024nclfepo5dl.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "158202031849-gbldihmc6irluqlfr6v39r4fpokvtrd1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "info.aboidrees.flashChat"
+              }
             }
           ]
         }

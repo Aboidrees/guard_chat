@@ -21,19 +21,20 @@ environment:
   sdk: ">=2.19.2 <3.0.0"
 
 dependencies:
+  flutter:
+    sdk: flutter
   animated_text_kit: ^4.2.2
   cloud_firestore: ^4.4.5
   cupertino_icons: ^1.0.5
   equatable: ^2.0.5
   firebase_auth: ^4.3.0
   firebase_core: ^2.8.0
-  flutter:
-    sdk: flutter
-  flutter_bloc: ^8.1.2
-  flutter_otp_text_field: ^1.1.1
-  fluttertoast: ^8.2.1
   google_fonts: ^4.0.3
+  flutter_bloc: ^8.1.2
+  fluttertoast: ^8.2.1
+  flutter_otp_text_field: ^1.1.0+2
   modal_progress_hud_nsn: ^0.3.0
+  firebase_app_check: ^0.1.2
 
 dev_dependencies:
   change_app_package_name: ^0.1.3

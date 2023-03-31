@@ -71,19 +71,20 @@ class _ChatScreenState extends State<ChatScreen> {
             children: <Widget>[
               const MessagesStream(),
               Container(
+                padding: const EdgeInsets.all(8),
                 decoration: kMessageContainerDecoration,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Expanded(child: TextFormField(controller: message, decoration: kMessageTextFieldDecoration)),
-                    TextButton(
+                    IconButton(
                       onPressed: () => Constants.showOTPDialog(
                         context,
                         verifyOTP: (verificationCode) {
                           log(verificationCode);
                         },
                       ),
-                      child: const Text(AppStrings.send, style: kSendButtonTextStyle),
+                      icon: const Icon(Icons.send),
                     ),
                   ],
                 ),

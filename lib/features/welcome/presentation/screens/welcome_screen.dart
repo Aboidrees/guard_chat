@@ -24,7 +24,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
     super.initState();
     _auth.authStateChanges().listen((User? user) => (user != null) ? Navigator.pushNamed(context, Routes.chat) : null);
     controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
-    animation = ColorTween(begin: AppColors.backgroundAccent, end: AppColors.background).animate(controller);
+    animation = ColorTween(begin: AppColors.primary, end: AppColors.backgroundPrimary).animate(controller);
     controller.forward();
     controller.addListener(() => setState(() {}));
   }

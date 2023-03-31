@@ -1,7 +1,6 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="dev.aboidrees.guard_chat">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
    <application
-        android:label="guard_chat"
+        android:label="Guard Chat"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
